@@ -6,14 +6,14 @@
 
 	<groupId>GHA_Testing_2</groupId>
 	<artifactId>Testing</artifactId>
-	<version>2.0.18</version>
+	<version>2.0.19</version>
 
 	<properties>
 		<java.target.version>1.8</java.target.version>
 		<java.source.version>1.8</java.source.version>
 		<gsVersion>14.5.0</gsVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<ghatesting1>0.0.9</ghatesting1>
+		<ghatesting1>1.0.0</ghatesting1>
 		<ghatesting2>0.0.4</ghatesting2>
 	</properties>
 
