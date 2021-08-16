@@ -7,7 +7,7 @@ on:
   #   "event_type": "build"
   # }
   repository_dispatch:
-    types: [update_1, update_2]
+    types: [update_3]
 
 jobs:
   Receive_Workflow_Trigger:
