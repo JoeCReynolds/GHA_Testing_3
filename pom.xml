@@ -6,7 +6,7 @@
 
 	<groupId>GHA_Testing_2</groupId>
 	<artifactId>Testing</artifactId>
-	<version>2.0.22</version>
+	<version>2.0.23</version>
 
 	<properties>
 		<java.target.version>1.8</java.target.version>
