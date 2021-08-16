@@ -1,0 +1,64 @@
+name: Receive Dispatch
+
+on:
+  # Have to send a POST request to https://api.github.com/repos/JoeCReynolds/GHA_Testing_2/dispatches
+  # with a body of the following:
+  # {
+  #   "event_type": "build"
+  # }
+  repository_dispatch:
+    types: [update_1, update_2]
+
+jobs:
+  Receive_Workflow_Trigger:
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-java@v2
+        name: Setup Java
+        with:
+          java-version: 11
+          distribution: adopt
+
+      - name: Cache Maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Set Maven Home Variable
+        run: |
+          echo "M2_HOME=`mvn --version | grep -i "MAVEN HOME" | awk -F': ' '{print $NF}'`" >> $GITHUB_ENV
+
+      - name: Check Maven Dependencies Versions
+        run: |
+          mvn versions:display-dependency-updates
+
+      - name: Client Payload
+        run: |
+          echo ${{ github.event.client_payload.new_version }}
+      
+      - name: Update Dependencies Versions
+        run: |
+          # mvn versions:use-dep-version -Dincludes=ghatesting:ghatesting -DdepVersion=1.0.0 -DforceVersion=true
+          mvn versions:set-property -Dproperty=${{ github.event.client_payload.property }} -DnewVersion=${{ github.event.client_payload.new_version }}
+
+      # This step utilizes the maven build-helper to increment the patch version
+      - name: Update Pom Version
+        run: |
+          mvn build-helper:parse-version versions:set \
+          -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion} \
+          versions:commit
+          cat pom.xml
+
+      # Below, %an is 'author name' and %ae is 'author email'
+      - name: Update Repo
+        run: |
+          echo ${{ github.repository }}
+          echo ${{ github.workspace }}
+          git config --global user.name "$(git log --format='%an' HEAD^!)"
+          git config --global user.email "$(git log --format='%ae' HEAD^!)" 
+          git add . &&  git commit -m "Update Pom version" && git push

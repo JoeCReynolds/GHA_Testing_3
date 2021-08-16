@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>GHA_Testing_2</groupId>
+	<artifactId>Testing</artifactId>
+	<version>2.0.13</version>
+
+	<properties>
+		<java.target.version>1.8</java.target.version>
+		<java.source.version>1.8</java.source.version>
+		<gsVersion>14.5.0</gsVersion>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<ghatesting1>1.0.0</ghatesting1>
+		<ghatesting2>1.0.0</ghatesting2>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ghatesting1</groupId>
+			<artifactId>ghatesting1</artifactId>
+			<version>${ghatesting1}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ghatesting2</groupId>
+			<artifactId>ghatesting2</artifactId>
+			<version>${ghatesting2}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${java.source.version}</source>
+					<target>${java.target.version}</target>
+				</configuration>
+				<version>2.3.2</version>
+			</plugin>
+
+		</plugins>
+	</build>
+
+</project>
