@@ -65,6 +65,7 @@ jobs:
           git add . &&  git commit -m "Update Pom version" && git push
 
   Create_Release:
+    needs: Receive_Workflow_Trigger
     name: Create Release
     runs-on: ubuntu-latest
     steps:
