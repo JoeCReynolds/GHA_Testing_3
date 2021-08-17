@@ -70,6 +70,9 @@ jobs:
         run: |
           echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
 
+    outputs:
+      VERSION: ${{ env.VERSION }}
+
 
   Create_Release:
     needs: Receive_Workflow_Trigger
@@ -81,8 +84,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          tag_name: v${{ env.VERSION }}
-          release_name: Release ${{ env.VERSION }}
+          tag_name: v${{ needs.Receive_Workflow_Trigger.outputs.VERSION }}
+          release_name: Release ${{ needs.Receive_Workflow_Trigger.outputs.VERSION }}
           body: |
             # Release: ${{ env.VERSION }}
             - Updated ${{ github.event.client_payload.property }} dependency version to ${{ github.event.client_payload.new_version }}
