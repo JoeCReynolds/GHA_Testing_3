@@ -85,8 +85,7 @@ jobs:
           tag_name: v${{ env.VERSION }}
           release_name: Release ${{ env.VERSION }}
           body: |
-            Changes in this Release
-            - First Change
-            - Second Change
+            # Release: ${{ env.VERSION }}
+            - Updated ${{ github.event.client_payload.property }} dependency version to ${{ github.event.client_payload.new_version }}
           draft: false
           prerelease: false
