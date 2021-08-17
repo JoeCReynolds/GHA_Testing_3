@@ -87,7 +87,7 @@ jobs:
           tag_name: v${{ needs.Receive_Workflow_Trigger.outputs.VERSION }}
           release_name: Release ${{ needs.Receive_Workflow_Trigger.outputs.VERSION }}
           body: |
-            # Release: ${{ env.VERSION }}
+            # Release: ${{ needs.Receive_Workflow_Trigger.outputs.VERSION }}
             - Updated ${{ github.event.client_payload.property }} dependency version to ${{ github.event.client_payload.new_version }}
           draft: false
           prerelease: false
