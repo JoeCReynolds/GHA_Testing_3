@@ -1,11 +1,13 @@
+# This is an example of sending a POST request using curl to trigger a repo dispatch
+# Replace <token>, <user>, <repo>
+# curl -H "Authorization: token <token>" \
+#     -H 'Accept: application/vnd.github.everest-preview+json' \
+#     "https://api.github.com/repos/<user>/<repo>/dispatches" \
+#     -d '{"event_type": "build", "client_payload": {"key": "value"}}'
+
 name: Receive Dispatch
 
 on:
-  # Have to send a POST request to https://api.github.com/repos/JoeCReynolds/GHA_Testing_2/dispatches
-  # with a body of the following:
-  # {
-  #   "event_type": "build"
-  # }
   repository_dispatch:
     types: [update_3]
 
@@ -37,13 +39,14 @@ jobs:
         run: |
           mvn versions:display-dependency-updates
 
+      # Echo the client payload
       - name: Client Payload
         run: |
           echo ${{ github.event.client_payload.new_version }}
       
+      # Looks for the property name given in the payload and updates to the new version also given in the payload
       - name: Update Dependencies Versions
         run: |
-          # mvn versions:use-dep-version -Dincludes=ghatesting:ghatesting -DdepVersion=1.0.0 -DforceVersion=true
           mvn versions:set-property -Dproperty=${{ github.event.client_payload.property }} -DnewVersion=${{ github.event.client_payload.new_version }}
           cat pom.xml
 
@@ -66,14 +69,17 @@ jobs:
           git pull
           git add . &&  git commit -m "Update Pom version" && git push
 
-      - name: Get Project Version
+      # Storing this as a variable for use in the next job
+      - name: Get Updated Project Version
         run: |
           echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
 
+    # The output(s) here can be used in subsequent jobs
     outputs:
       VERSION: ${{ env.VERSION }}
 
 
+  # This job will not trigger unless the previous job has completed successfully
   Create_Release:
     needs: Receive_Workflow_Trigger
     name: Create Release
