@@ -66,17 +66,16 @@ jobs:
           git pull
           git add . &&  git commit -m "Update Pom version" && git push
 
-  # Create_Release:
-  #   needs: Receive_Workflow_Trigger
-  #   name: Create Release
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v2
-
       - name: Get Project Version
         run: |
           echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+
+
+  Create_Release:
+    needs: Receive_Workflow_Trigger
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
       - name: Create Release
         uses: actions/create-release@v1
         env:
